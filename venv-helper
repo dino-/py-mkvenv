@@ -1,0 +1,46 @@
+#! /usr/bin/env python3
+
+"""
+- Need a more catchy name
+- Put this script in its own project (directory), not in scripts
+- Put this list elsewhere, maybe Trello
+- Get arg parsing library in here, it's getting complicated
+- If a directory is given, try to create that project, as below
+- If no directory is given
+  - Ask the user if they would like to set up a venv in this directory
+  - Ask for a venv dir name, defaulting to `.venv`
+- If a requirements.txt file exists, pip install it (docs on how?)
+- Quiet and/or answer-yes switch(es)?
+"""
+
+import os
+import subprocess
+import sys
+
+
+venvDir = ".venv"
+
+if len(sys.argv) < 2:
+  sys.exit("Usage: new-py PROJECT_DIR")
+
+projectDir = sys.argv[1]
+if os.path.exists(projectDir):
+  sys.exit(f"ERROR: Directory {projectDir} already exists")
+os.makedirs(projectDir)
+
+os.chdir(projectDir)
+subprocess.call(["python3", "-m", "venv", venvDir])
+subprocess.call([f"{venvDir}/bin/python", "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"])
+with open(".gitignore", "w") as f:
+  f.write(f"{venvDir}\n")
+
+print(f"\nProject is ready in directory {projectDir}\n")
+
+print("Useful commands:\n")
+
+print(f"$ cd {projectDir}")
+print( "$ git init  # and then more git commands")
+print(f"$ . ./{venvDir}/bin/activate")
+print( "$ pip install SOME_PYTHON_PACKAGE")
+print( "$ pip freeze > requirements.txt  # Not a bad idea to put requirements.txt in source control")
+print( "$ deactivate")
