@@ -1,18 +1,5 @@
 #! /usr/bin/env python3
 
-"""
-- Need a more catchy name
-- Put this script in its own project (directory), not in scripts
-- Put this list elsewhere, maybe Trello
-- Get arg parsing library in here, it's getting complicated
-- If a directory is given, try to create that project, as below
-- If no directory is given
-  - Ask the user if they would like to set up a venv in this directory
-  - Ask for a venv dir name, defaulting to `.venv`
-- If a requirements.txt file exists, pip install it (docs on how?)
-- Quiet and/or answer-yes switch(es)?
-"""
-
 import os
 import subprocess
 import sys
