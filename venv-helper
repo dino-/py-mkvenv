@@ -5,29 +5,55 @@ import subprocess
 import sys
 
 
-venvDir = ".venv"
+def prepDirectory(projectDir):
+  if os.path.exists(projectDir):
+    sys.exit(f"ERROR: Directory {projectDir} already exists")
+  else:
+    os.makedirs(projectDir)
+    os.chdir(projectDir)
 
-if len(sys.argv) < 2:
-  sys.exit("Usage: new-py PROJECT_DIR")
 
-projectDir = sys.argv[1]
-if os.path.exists(projectDir):
-  sys.exit(f"ERROR: Directory {projectDir} already exists")
-os.makedirs(projectDir)
+def mkVirtEnv(venvDir):
+  subprocess.call(["python3", "-m", "venv", venvDir])
+  subprocess.call([f"{venvDir}/bin/python", "-m", "pip", "install",
+    "--upgrade", "pip", "setuptools", "wheel"])
 
-os.chdir(projectDir)
-subprocess.call(["python3", "-m", "venv", venvDir])
-subprocess.call([f"{venvDir}/bin/python", "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"])
-with open(".gitignore", "w") as f:
-  f.write(f"{venvDir}\n")
 
-print(f"\nProject is ready in directory {projectDir}\n")
+def mkGitignore(venvDir):
+  gitIgnoreFile = '.gitignore'
 
-print("Useful commands:\n")
+  if os.path.exists(gitIgnoreFile):
+    print(f"{gitIgnoreFile} already exists, not creating")
+  else:
+    with open(".gitignore", "w") as f:
+      f.write(f"{venvDir}\n")
+    print(f"{gitIgnoreFile} created")
 
-print(f"$ cd {projectDir}")
-print( "$ git init  # and then more git commands")
-print(f"$ . ./{venvDir}/bin/activate")
-print( "$ pip install SOME_PYTHON_PACKAGE")
-print( "$ pip freeze > requirements.txt  # Not a bad idea to put requirements.txt in source control")
-print( "$ deactivate")
+
+def printSuccessMsg(projectDir, venvDir):
+  print(
+    f"\nVirtual environment is ready for project in {projectDir}\n\n"
+
+     "Useful commands:\n\n"
+
+    f"$ cd {projectDir}\n"
+     "$ git init  # and then more git commands\n"
+    f"$ . ./{venvDir}/bin/activate\n"
+     "$ pip install SOME_PYTHON_PACKAGE\n"
+     "$ pip freeze > requirements.txt  # Not a bad idea to put requirements.txt in source control\n"
+     "$ deactivate\n"
+    )
+
+
+if __name__ == '__main__':
+  venvDir = ".venv"
+
+  if len(sys.argv) < 2:
+    sys.exit("Usage: new-py PROJECT_DIR")
+
+  projectDir = sys.argv[1]
+
+  prepDirectory(projectDir)
+  mkVirtEnv(venvDir)
+  mkGitignore(venvDir)
+  printSuccessMsg(projectDir, venvDir)
