@@ -1,34 +1,31 @@
 #! /usr/bin/env python3
 
-import argparse
+"""
+usage: venv-helper [-h] [-v DIR] [PROJECT_DIR]
+
+Set up a Python virtual environment directory in a new or existing project
+using `python -m venv`. It will also create a .gitignore file if none is
+present.
+
+positional arguments:
+  PROJECT_DIR   Project directory, setting this will create a new project
+                directory and work in it [default: .]
+
+options:
+  -h --help     Show this help message and exit
+  -v DIR --venv-dir DIR
+                Directory under the project to create the virtual
+                environment [default: .venv]
+  --version     Show version info and exit
+
+v1.0  Dino Morelli <dino@ui3.info>
+
+"""
+
+
+from docopt import docopt
 import os
 import subprocess
-
-
-def parseArgs(defaultVenvDir):
-  parser = argparse.ArgumentParser(
-    description = 'Set up a Python virtual environment directory in a new or existing project using `python -m venv`. It will also create a .gitignore file if none is present.',
-    epilog = 'v1.0  Dino Morelli <dino@ui3.info>',
-    formatter_class = argparse.ArgumentDefaultsHelpFormatter
-    )
-
-  parser.add_argument(
-    'projectDir',
-    metavar = 'DIR',
-    nargs = '?',
-    default = '.',
-    help = 'Project directory, setting this will create a new project'
-    )
-
-  parser.add_argument(
-    '-v', '--venv-dir',
-    dest = 'venvDir',
-    metavar = 'DIR',
-    default = defaultVenvDir,
-    help = 'Directory under the project to create the virtual environment'
-    )
-
-  return parser.parse_args()
 
 
 def prepDirectory(projectDir):
@@ -87,14 +84,14 @@ def printSuccessMsg(projectDir, venvDir):
 
 
 def main():
-  defaultVenvDir = ".venv"
+  args = docopt(__doc__, version='venv-helper 1.0')
+  # docopt can't set default values for positional arguments (yet), fix that up here
+  if args['PROJECT_DIR'] is None: args['PROJECT_DIR'] = '.'
 
-  args = parseArgs(defaultVenvDir)
-
-  prepDirectory(args.projectDir)
-  mkVirtEnv(args.projectDir, args.venvDir)
-  mkGitignore(args.projectDir, args.venvDir)
-  printSuccessMsg(args.projectDir, args.venvDir)
+  prepDirectory(args['PROJECT_DIR'])
+  mkVirtEnv(args['PROJECT_DIR'], args['--venv-dir'])
+  mkGitignore(args['PROJECT_DIR'], args['--venv-dir'])
+  printSuccessMsg(args['PROJECT_DIR'], args['--venv-dir'])
 
 
 if __name__ == '__main__': main()
