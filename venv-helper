@@ -65,7 +65,7 @@ def printSuccessMsg(projectDir, venvDir):
     )
 
 
-if __name__ == '__main__':
+def main():
   defaultVenvDir = ".venv"
 
   if len(sys.argv) < 2:
@@ -77,3 +77,6 @@ if __name__ == '__main__':
   venvDir = mkVirtEnv(projectDir, defaultVenvDir)
   mkGitignore(projectDir, venvDir)
   printSuccessMsg(projectDir, venvDir)
+
+
+if __name__ == '__main__': main()
