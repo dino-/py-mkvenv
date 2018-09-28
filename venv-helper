@@ -1,14 +1,38 @@
 #! /usr/bin/env python3
 
+import argparse
 import os
 import subprocess
-import sys
+
+
+def parseArgs(defaultVenvDir):
+  parser = argparse.ArgumentParser(
+    description = 'Set up a Python virtual environment directory in a new or existing project using `python -m venv`. It will also create a .gitignore file if none is present.',
+    epilog = 'v1.0  Dino Morelli <dino@ui3.info>',
+    formatter_class = argparse.ArgumentDefaultsHelpFormatter
+    )
+
+  parser.add_argument(
+    'projectDir',
+    metavar = 'DIR',
+    nargs = '?',
+    default = '.',
+    help = 'Project directory, setting this will create a new project'
+    )
+
+  parser.add_argument(
+    '-v', '--venv-dir',
+    dest = 'venvDir',
+    metavar = 'DIR',
+    default = defaultVenvDir,
+    help = 'Directory under the project to create the virtual environment'
+    )
+
+  return parser.parse_args()
 
 
 def prepDirectory(projectDir):
-  if os.path.exists(projectDir):
-    sys.exit(f"ERROR: Directory {projectDir} already exists")
-  else:
+  if not os.path.exists(projectDir):
     os.makedirs(projectDir)
 
 
@@ -24,19 +48,13 @@ def withDirectory(dir, f):
     os.chdir(cwd)
 
 
-def mkVirtEnv(projectDir, defaultVenvDir):
-  venvDir = input(f"Virtual environment directory (default {defaultVenvDir} under {projectDir})? ")
-  if venvDir == '':
-    venvDir = defaultVenvDir
-
+def mkVirtEnv(projectDir, venvDir):
   def f():
     subprocess.call(["python3", "-m", "venv", venvDir])
     subprocess.call([f"{venvDir}/bin/python", "-m", "pip", "install",
       "--upgrade", "pip", "setuptools", "wheel"])
 
   withDirectory(projectDir, f)
-
-  return venvDir
 
 
 def mkGitignore(projectDir, venvDir):
@@ -51,12 +69,15 @@ def mkGitignore(projectDir, venvDir):
 
 
 def printSuccessMsg(projectDir, venvDir):
+  if projectDir == '.': cdLine = ''
+  else: cdLine = f'$ cd {projectDir}\n'
+
   print(
     f"\nVirtual environment is ready for project in {projectDir}\n\n"
 
      "Useful commands:\n\n"
 
-    f"$ cd {projectDir}\n"
+    + cdLine +
      "$ git init  # and then more git commands\n"
     f"$ . ./{venvDir}/bin/activate\n"
      "$ pip install SOME_PYTHON_PACKAGE\n"
@@ -68,15 +89,12 @@ def printSuccessMsg(projectDir, venvDir):
 def main():
   defaultVenvDir = ".venv"
 
-  if len(sys.argv) < 2:
-    sys.exit("Usage: new-py PROJECT_DIR")
+  args = parseArgs(defaultVenvDir)
 
-  projectDir = sys.argv[1]
-
-  prepDirectory(projectDir)
-  venvDir = mkVirtEnv(projectDir, defaultVenvDir)
-  mkGitignore(projectDir, venvDir)
-  printSuccessMsg(projectDir, venvDir)
+  prepDirectory(args.projectDir)
+  mkVirtEnv(args.projectDir, args.venvDir)
+  mkGitignore(args.projectDir, args.venvDir)
+  printSuccessMsg(args.projectDir, args.venvDir)
 
 
 if __name__ == '__main__': main()
