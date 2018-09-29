@@ -3,12 +3,12 @@
 """
 usage: py3-mkvenv [-h] [-v DIR] [PROJECT_DIR]
 
-Create a Python virtual environment directory in a new or existing project
+Creates a Python virtual environment directory in a new or existing project
 using `python -m venv`. After the environment is created, this tool will update
-pip, setuptools and wheel. Finally, it will detect a `requirements.txt` file
-and `pip install -r` it.
+`pip`, `setuptools` and `wheel`. Finally, it will detect a `requirements.txt`
+file and `pip install -r` it.
 
-This tool will also create a .gitignore file if none is present.
+This tool will also create a `.gitignore` file if none is present.
 
 positional arguments:
   PROJECT_DIR   Project directory, specifying this will create a new project
