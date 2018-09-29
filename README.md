@@ -54,6 +54,13 @@ If desired, deactivate the virtual environment in your shell
 
     $ deactivate
 
+### Deployment
+
+The project's `requirements.txt` will pull in `pyinstaller` which can be used
+to build a distributable standalone directory in `dist`
+
+    $ pyinstaller py3-mkvenv
+
 ### Issue tracking
 
 We are tracking tasks and progress on a public [py3-mkvenv Trello
