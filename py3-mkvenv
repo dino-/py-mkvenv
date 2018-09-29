@@ -50,9 +50,9 @@ def withDirectory(dir, f):
 
 def mkVirtEnv(projectDir, venvDir):
   def f():
-    subprocess.call(["python3", "-m", "venv", venvDir])
-    subprocess.call([f"{venvDir}/bin/python", "-m", "pip", "install",
-      "--upgrade", "pip", "setuptools", "wheel"])
+    subprocess.call(['python3', '-m', 'venv', venvDir])
+    subprocess.call([f'{venvDir}/bin/python', '-m', 'pip', 'install',
+      '--upgrade', 'pip', 'setuptools', 'wheel'])
 
   withDirectory(projectDir, f)
 
@@ -61,11 +61,11 @@ def mkGitignore(projectDir, venvDir):
   gitIgnoreFile = f'{projectDir}/.gitignore'
 
   if os.path.exists(gitIgnoreFile):
-    print(f"{gitIgnoreFile} already exists, not creating")
+    print(f'{gitIgnoreFile} already exists, not creating')
   else:
-    with open(gitIgnoreFile, "w") as f:
-      f.write(f"{venvDir}\n")
-    print(f"{gitIgnoreFile} created")
+    with open(gitIgnoreFile, 'w') as f:
+      f.write(f'{venvDir}\n')
+    print(f'{gitIgnoreFile} created')
 
 
 def printSuccessMsg(projectDir, venvDir):
@@ -73,16 +73,16 @@ def printSuccessMsg(projectDir, venvDir):
   else: cdLine = f'$ cd {projectDir}\n'
 
   print(
-    f"\nVirtual environment is ready for project in {projectDir}\n\n"
+    f'\nVirtual environment is ready for project in {projectDir}\n\n'
 
-     "Useful commands:\n\n"
+     'Useful commands:\n\n'
 
     + cdLine +
-     "$ git init  # and then more git commands\n"
-    f"$ . ./{venvDir}/bin/activate\n"
-     "$ pip install SOME_PYTHON_PACKAGE\n"
-     "$ pip freeze > requirements.txt  # Not a bad idea to put requirements.txt in source control\n"
-     "$ deactivate\n"
+     '$ git init  # and then more git commands\n'
+    f'$ . ./{venvDir}/bin/activate\n'
+     '$ pip install SOME_PYTHON_PACKAGE\n'
+     '$ pip freeze > requirements.txt  # Not a bad idea to put requirements.txt in source control\n'
+     '$ deactivate\n'
     )
 
 
