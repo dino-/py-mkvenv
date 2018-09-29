@@ -35,30 +35,19 @@ def prepDirectory(projectDir):
   if not os.path.exists(projectDir):
     os.makedirs(projectDir)
 
-
-# Execute a function after chdir to the supplied directory, restoring the
-# working directory afterwards.
-def withDirectory(dir, f):
-  cwd = os.getcwd()
-
-  try:
-    os.chdir(dir)
-    f()
-  finally:
-    os.chdir(cwd)
+  # It's VERY IMPORTANT this chdir command executes. Without it, many files
+  # will be created in subsequent function calls in the wrong place.
+  os.chdir(projectDir)
 
 
-def mkVirtEnv(projectDir, venvDir):
-  def f():
-    subprocess.call(['python3', '-m', 'venv', venvDir])
-    subprocess.call([f'{venvDir}/bin/python', '-m', 'pip', 'install',
-      '--upgrade', 'pip', 'setuptools', 'wheel'])
-
-  withDirectory(projectDir, f)
+def mkVirtEnv(venvDir):
+  subprocess.call(['python3', '-m', 'venv', venvDir])
+  subprocess.call([f'{venvDir}/bin/python', '-m', 'pip', 'install',
+    '--upgrade', 'pip', 'setuptools', 'wheel'])
 
 
-def mkGitignore(projectDir, venvDir):
-  gitIgnoreFile = f'{projectDir}/.gitignore'
+def mkGitignore(venvDir):
+  gitIgnoreFile = f'.gitignore'
 
   if os.path.exists(gitIgnoreFile):
     print(f'{gitIgnoreFile} already exists, not creating')
@@ -92,8 +81,8 @@ def main():
   if args['PROJECT_DIR'] is None: args['PROJECT_DIR'] = '.'
 
   prepDirectory(args['PROJECT_DIR'])
-  mkVirtEnv(args['PROJECT_DIR'], args['--venv-dir'])
-  mkGitignore(args['PROJECT_DIR'], args['--venv-dir'])
+  mkVirtEnv(args['--venv-dir'])
+  mkGitignore(args['--venv-dir'])
   printSuccessMsg(args['PROJECT_DIR'], args['--venv-dir'])
 
 
