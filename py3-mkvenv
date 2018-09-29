@@ -2,7 +2,7 @@
 
 """
 usage:
-  py3-mkvenv [-v DIR] [PROJECT_DIR]
+  py3-mkvenv [-v DIR] [-G] [PROJECT_DIR]
   py3-mkvenv [-h]
   py3-mkvenv [--version]
 
@@ -14,6 +14,8 @@ positional arguments:
 
 options:
   -h, --help    Show this help message and exit
+  -G, --no-gitignore
+                Suppress creation of `.gitignore` file
   -v DIR, --venv-dir DIR
                 Directory under the project to create the virtual
                 environment [default: .venv]
@@ -60,11 +62,13 @@ def mkVirtEnv(venvDir):
     '--upgrade', 'pip', 'setuptools', 'wheel'])
 
 
-def mkGitignore(venvDir):
+def mkGitignore(venvDir, noGitignore):
   gitIgnoreFile = f'.gitignore'
 
   if os.path.exists(gitIgnoreFile):
     print(f'{gitIgnoreFile} already exists, not creating')
+  elif noGitignore:
+    print(f'No {gitIgnoreFile} desired, not creating')
   else:
     with open(gitIgnoreFile, 'w') as f:
       f.write(f'{venvDir}\n')
@@ -78,7 +82,7 @@ def main():
 
   prepDirectory(args['PROJECT_DIR'])
   mkVirtEnv(args['--venv-dir'])
-  mkGitignore(args['--venv-dir'])
+  mkGitignore(args['--venv-dir'], args['--no-gitignore'])
   print(f"\nVirtual environment is ready for project in {args['PROJECT_DIR']}")
 
 
