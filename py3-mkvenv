@@ -2,7 +2,7 @@
 
 """
 usage:
-  py3-mkvenv [-v DIR] [-G] [PROJECT_DIR]
+  py3-mkvenv [-v DIR] [-R] [-G] [PROJECT_DIR]
   py3-mkvenv [-h]
   py3-mkvenv [--version]
 
@@ -16,6 +16,7 @@ options:
   -h, --help    Show this help message and exit
   -G, --no-gitignore
                 Suppress creation of `.gitignore` file
+  -R, --no-req  Suppress installation of dependencies in `requirements.txt`
   -v DIR, --venv-dir DIR
                 Directory under the project to create the virtual
                 environment [default: .venv]
@@ -56,10 +57,19 @@ def prepDirectory(projectDir):
   os.chdir(projectDir)
 
 
-def mkVirtEnv(venvDir):
+def mkVirtEnv(venvDir, noReq):
   subprocess.call(['python3', '-m', 'venv', venvDir])
   subprocess.call([f'{venvDir}/bin/python', '-m', 'pip', 'install',
     '--upgrade', 'pip', 'setuptools', 'wheel'])
+
+  reqFile = 'requirements.txt'
+
+  if not os.path.exists(reqFile):
+    print(f'No {reqFile} found')
+  elif noReq:
+    print('Installation of requirements not desired')
+  else:
+    subprocess.call([f'{venvDir}/bin/pip', 'install', '-r', reqFile])
 
 
 def mkGitignore(venvDir, noGitignore):
@@ -81,7 +91,7 @@ def main():
   if args['PROJECT_DIR'] is None: args['PROJECT_DIR'] = '.'
 
   prepDirectory(args['PROJECT_DIR'])
-  mkVirtEnv(args['--venv-dir'])
+  mkVirtEnv(args['--venv-dir'], args['--no-req'])
   mkGitignore(args['--venv-dir'], args['--no-gitignore'])
   print(f"\nVirtual environment is ready for project in {args['PROJECT_DIR']}")
 
