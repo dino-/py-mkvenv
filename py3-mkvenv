@@ -63,7 +63,7 @@ def mkVirtEnv(venvDir):
 
 
 def mkGitignore(venvDir, noGitignore):
-  gitIgnoreFile = f'.gitignore'
+  gitIgnoreFile = '.gitignore'
 
   if os.path.exists(gitIgnoreFile):
     print(f'{gitIgnoreFile} already exists, not creating')
