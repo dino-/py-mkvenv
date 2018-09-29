@@ -3,17 +3,20 @@
 """
 usage: venv-helper [-h] [-v DIR] [PROJECT_DIR]
 
-Set up a Python virtual environment directory in a new or existing project
-using `python -m venv`. It will also create a .gitignore file if none is
-present.
+Create a Python virtual environment directory in a new or existing project
+using `python -m venv`. After the environment is created, this tool will update
+pip, setuptools and wheel. Finally, it will detect a `requirements.txt` file
+and `pip install -r` it.
+
+This tool will also create a .gitignore file if none is present.
 
 positional arguments:
-  PROJECT_DIR   Project directory, setting this will create a new project
-                directory and work in it [default: .]
+  PROJECT_DIR   Project directory, specifying this will create a new project
+                directory and environment within it [default: .]
 
 options:
-  -h --help     Show this help message and exit
-  -v DIR --venv-dir DIR
+  -h, --help    Show this help message and exit
+  -v DIR, --venv-dir DIR
                 Directory under the project to create the virtual
                 environment [default: .venv]
   --version     Show version info and exit
