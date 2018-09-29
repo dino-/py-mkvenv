@@ -1,14 +1,12 @@
 #! /usr/bin/env python3
 
 """
-usage: py3-mkvenv [-h] [-v DIR] [PROJECT_DIR]
+usage:
+  py3-mkvenv [-v DIR] [PROJECT_DIR]
+  py3-mkvenv [-h]
+  py3-mkvenv [--version]
 
-Creates a Python virtual environment directory in a new or existing project
-using `python -m venv`. After the environment is created, this tool will update
-`pip`, `setuptools` and `wheel`. Finally, it will detect a `requirements.txt`
-file and `pip install -r` it.
-
-This tool will also create a `.gitignore` file if none is present.
+Automate creation of virtual environments in Python 3 projects
 
 positional arguments:
   PROJECT_DIR   Project directory, specifying this will create a new project
@@ -21,10 +19,26 @@ options:
                 environment [default: .venv]
   --version     Show version info and exit
 
+
+Creates a Python virtual environment directory in a new or existing project
+using `python -m venv`. After the environment is created, this tool will update
+`pip`, `setuptools` and `wheel`. Finally, it will detect a `requirements.txt`
+file and `pip install -r` it.
+
+This tool will also create a `.gitignore` file if none is present.
+
+After your environment is created, don't forget to activate
+
+  $ . ./.venv/bin/activate
+
+If you add more packages, consider refreshing the `requirements.txt` file
+
+  $ pip install SOME_PYTHON_PACKAGE
+  $ pip freeze > requirements.txt
+
 v1.0  Dino Morelli <dino@ui3.info>
 
 """
-
 
 from docopt import docopt
 import os
@@ -57,24 +71,6 @@ def mkGitignore(venvDir):
     print(f'{gitIgnoreFile} created')
 
 
-def printSuccessMsg(projectDir, venvDir):
-  if projectDir == '.': cdLine = ''
-  else: cdLine = f'$ cd {projectDir}\n'
-
-  print(
-    f'\nVirtual environment is ready for project in {projectDir}\n\n'
-
-     'Useful commands:\n\n'
-
-    + cdLine +
-     '$ git init  # and then more git commands\n'
-    f'$ . ./{venvDir}/bin/activate\n'
-     '$ pip install SOME_PYTHON_PACKAGE\n'
-     '$ pip freeze > requirements.txt  # Not a bad idea to put requirements.txt in source control\n'
-     '$ deactivate\n'
-    )
-
-
 def main():
   args = docopt(__doc__, version='py3-mkvenv 1.0')
   # docopt can't set default values for positional arguments (yet), fix that up here
@@ -83,7 +79,7 @@ def main():
   prepDirectory(args['PROJECT_DIR'])
   mkVirtEnv(args['--venv-dir'])
   mkGitignore(args['--venv-dir'])
-  printSuccessMsg(args['PROJECT_DIR'], args['--venv-dir'])
+  print(f"\nVirtual environment is ready for project in {args['PROJECT_DIR']}")
 
 
 if __name__ == '__main__': main()
