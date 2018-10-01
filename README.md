@@ -9,9 +9,9 @@ Automate creation of virtual environments in Python 3 projects
 ## Description
 
 Creates a Python virtual environment directory in a new or existing project
-using `python -m venv`. After the environment is created, this tool will update
-`pip`, `setuptools` and `wheel`. Finally, it will detect a `requirements.txt`
-file and `pip install -r` it.
+using `python3 -m venv`. After the environment is created, this tool will
+update `pip`, `setuptools` and `wheel`. Finally, it will detect a
+`requirements.txt` file and `pip install -r` it.
 
 This tool will also create a `.gitignore` file if none is present.
 
