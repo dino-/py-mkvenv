@@ -2,9 +2,9 @@
 
 """
 usage:
-  py3-mkvenv [-v DIR] [-R] [-G] [PROJECT_DIR]
-  py3-mkvenv [-h]
-  py3-mkvenv [--version]
+  py-mkvenv [-v DIR] [-R] [-G] [PROJECT_DIR]
+  py-mkvenv [-h]
+  py-mkvenv [--version]
 
 Automate creation of virtual environments in Python 3 projects
 
@@ -86,7 +86,7 @@ def mkGitignore(venvDir, noGitignore):
 
 
 def main():
-  args = docopt(__doc__, version='py3-mkvenv 1.1')
+  args = docopt(__doc__, version='py-mkvenv 1.1')
   # docopt can't set default values for positional arguments (yet), fix that up here
   if args['PROJECT_DIR'] is None: args['PROJECT_DIR'] = '.'
 

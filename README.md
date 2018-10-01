@@ -1,4 +1,4 @@
-# py3-mkvenv
+# py-mkvenv
 
 
 ## Synopsis
@@ -21,16 +21,16 @@ This tool will also create a `.gitignore` file if none is present.
 ### Setting up your development environment
 
 Source code is available from github at the
-[py3-mkvenv](https://github.com/dino-/py3-mkvenv) project page. This directory
+[py-mkvenv](https://github.com/dino-/py-mkvenv) project page. This directory
 will of course have no virtual environment specific to your system.
 
 This tool exists to perform most of the following steps, but if you don't have
 it operational yet, you'll need to manually bootstrap the virtual environment.
 Here's how:
 
-From within the `py3-mkvenv` directory, set up the venv
+From within the `py-mkvenv` directory, set up the venv
 
-    $ cd py3-mkvenv
+    $ cd py-mkvenv
     $ python3 -m venv .venv
 
 From here on out, make sure you're working in the environment
@@ -59,12 +59,12 @@ If desired, deactivate the virtual environment in your shell
 The project's `requirements.txt` will pull in `pyinstaller` which can be used
 to build a distributable standalone directory in `dist`
 
-    $ pyinstaller py3-mkvenv
+    $ pyinstaller py-mkvenv
 
 ### Issue tracking
 
-We are tracking tasks and progress on a public [py3-mkvenv Trello
-board](https://trello.com/b/hkjMdAbG/py3-mkvenv)
+We are tracking tasks and progress on a public [py-mkvenv Trello
+board](https://trello.com/b/hkjMdAbG/py-mkvenv)
 
 
 ## Contact
