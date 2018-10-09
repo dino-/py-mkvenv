@@ -59,7 +59,7 @@ If desired, deactivate the virtual environment in your shell
 The project's `requirements.txt` will pull in `pyinstaller` which can be used
 to build a distributable standalone directory in `dist`
 
-    $ pyinstaller py-mkvenv
+    $ pyinstaller py-mkvenv.spec
 
 ### Issue tracking
 
