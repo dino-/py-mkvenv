@@ -16,6 +16,11 @@ update `pip`, `setuptools` and `wheel`. Finally, it will detect a
 This tool will also create a `.gitignore` file if none is present.
 
 
+## Getting binaries
+
+py-mkvenv is available for Linux in AppImage form [from github](https://github.com/dino-/py-mkvenv/releases)
+
+
 ## Development
 
 ### Setting up your development environment
@@ -54,12 +59,40 @@ If desired, deactivate the virtual environment in your shell
 
     $ deactivate
 
-### Deployment
+### Building for release
 
-The project's `requirements.txt` will pull in `pyinstaller` which can be used
+The preferred method of building py-mkvenv for release is as an
+[AppImage](https://appimage.org/)
+
+You will need the AppDir tool [linuxdeploy](https://github.com/linuxdeploy/linuxdeploy)
+and the AppImage plugin [linuxdeploy-plugin-appimage](https://github.com/linuxdeploy/linuxdeploy-plugin-appimage).
+These need to be set executable and can be on your PATH if you wish.
+
+The project's `requirements.txt` will pull in `pyinstaller` which will be used
 to build a distributable standalone directory in `dist`
 
+First, prep the AppDir with one provided for this project like this:
+
+    $ cp -r util/resources/AppDir .
+
+Next, build a standalone distributable directory with `pyinstaller`.
+
     $ pyinstaller py-mkvenv.spec
+
+Move those build artifacts into the AppDir directory.
+
+    $ mv dist/py-mkvenv AppDir/usr/share
+
+Finally, run `linuxdeploy` to complete the process of creating the AppImage
+
+    $ linuxdeploy-x86_64.AppImage --appdir=AppDir --output=appimage
+
+You should now have a binary named `py-mkvenv-x86_64.AppImage`.
+
+This binary could be renamed to something like `py-mkvenv-1.2.AppImage` if you
+wish the version number to be explicit in the filename.
+
+These steps will likely be automated in the future.
 
 ### Issue tracking
 
