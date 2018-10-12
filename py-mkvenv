@@ -59,30 +59,30 @@ def prepDirectory(projectDir):
 
 def mkVirtEnv(venvDir, noReq):
   subprocess.call(['python3', '-m', 'venv', venvDir])
-  subprocess.call([f'{venvDir}/bin/python', '-m', 'pip', 'install',
+  subprocess.call(['{}/bin/python'.format(venvDir), '-m', 'pip', 'install',
     '--upgrade', 'pip', 'setuptools', 'wheel'])
 
   reqFile = 'requirements.txt'
 
   if not os.path.exists(reqFile):
-    print(f'No {reqFile} found')
+    print('No {} found'.format(reqFile))
   elif noReq:
     print('Installation of requirements not desired')
   else:
-    subprocess.call([f'{venvDir}/bin/pip', 'install', '-r', reqFile])
+    subprocess.call(['{}/bin/pip'.format(venvDir), 'install', '-r', reqFile])
 
 
 def mkGitignore(venvDir, noGitignore):
   gitIgnoreFile = '.gitignore'
 
   if os.path.exists(gitIgnoreFile):
-    print(f'{gitIgnoreFile} already exists, not creating')
+    print('{} already exists, not creating'.format(gitIgnoreFile))
   elif noGitignore:
-    print(f'No {gitIgnoreFile} desired, not creating')
+    print('No {} desired, not creating'.format(gitIgnoreFile))
   else:
     with open(gitIgnoreFile, 'w') as f:
-      f.write(f'{venvDir}\n')
-    print(f'{gitIgnoreFile} created')
+      f.write('{}\n'.format(venvDir))
+    print('{} created'.format(gitIgnoreFile))
 
 
 def main():
@@ -93,7 +93,7 @@ def main():
   prepDirectory(args['PROJECT_DIR'])
   mkVirtEnv(args['--venv-dir'], args['--no-req'])
   mkGitignore(args['--venv-dir'], args['--no-gitignore'])
-  print(f"\nVirtual environment is ready for project in {args['PROJECT_DIR']}")
+  print("\nVirtual environment is ready for project in {}".format(args['PROJECT_DIR']))
 
 
 if __name__ == '__main__': main()
