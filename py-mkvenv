@@ -44,38 +44,38 @@ v1.3  Dino Morelli <dino@ui3.info>
 """
 
 from docopt import docopt
-import os
-import subprocess
+from os import (chdir, makedirs, path)
+from subprocess import call
 
 
 def prepDirectory(projectDir):
-  if not os.path.exists(projectDir):
-    os.makedirs(projectDir)
+  if not path.exists(projectDir):
+    makedirs(projectDir)
 
   # It's VERY IMPORTANT this chdir command executes. Without it, many files
   # will be created in subsequent function calls in the wrong place.
-  os.chdir(projectDir)
+  chdir(projectDir)
 
 
 def mkVirtEnv(venvDir, noReq):
-  subprocess.call(['python3', '-m', 'venv', venvDir])
-  subprocess.call(['{}/bin/python'.format(venvDir), '-m', 'pip', 'install',
+  call(['python3', '-m', 'venv', venvDir])
+  call(['{}/bin/python'.format(venvDir), '-m', 'pip', 'install',
     '--upgrade', 'pip', 'setuptools', 'wheel'])
 
   reqFile = 'requirements.txt'
 
-  if not os.path.exists(reqFile):
+  if not path.exists(reqFile):
     print('No {} found'.format(reqFile))
   elif noReq:
     print('Installation of requirements not desired')
   else:
-    subprocess.call(['{}/bin/pip'.format(venvDir), 'install', '-r', reqFile])
+    call(['{}/bin/pip'.format(venvDir), 'install', '-r', reqFile])
 
 
 def mkGitignore(venvDir, noGitignore):
   gitIgnoreFile = '.gitignore'
 
-  if os.path.exists(gitIgnoreFile):
+  if path.exists(gitIgnoreFile):
     print('{} already exists, not creating'.format(gitIgnoreFile))
   elif noGitignore:
     print('No {} desired, not creating'.format(gitIgnoreFile))
