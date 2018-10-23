@@ -93,7 +93,7 @@ def main():
   prepDirectory(args['PROJECT_DIR'])
   mkVirtEnv(args['--venv-dir'], args['--no-req'])
   mkGitignore(args['--venv-dir'], args['--no-gitignore'])
-  print("\nVirtual environment is ready for project in {}".format(args['PROJECT_DIR']))
+  print("\nVirtual environment is ready for project in directory {}".format(args['PROJECT_DIR']))
 
 
 if __name__ == '__main__': main()
