@@ -94,11 +94,6 @@ wish the version number to be explicit in the filename.
 
 These steps will likely be automated in the future.
 
-### Issue tracking
-
-We are tracking tasks and progress on a public [py-mkvenv Trello
-board](https://trello.com/b/hkjMdAbG/py-mkvenv)
-
 
 ## Contact
 
