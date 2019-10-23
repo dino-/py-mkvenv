@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 import argparse
-from os import (chdir, makedirs, path)
+from os import (chdir, getcwd, makedirs, path)
 from subprocess import call
 from sys import argv
 
@@ -79,41 +79,55 @@ v{}  Dino Morelli <dino@ui3.info>""".format(version)
   return parser.parse_args()
 
 
+# Execute a function only if we can chdir into the supplied directory first.
+# Restoring the working directory afterwards.
+def withDirectory(dir, f):
+  cwd = getcwd()
+
+  try:
+    chdir(dir)
+    f()
+  finally:
+    chdir(cwd)
+
+
 def prepDirectory(projectDir):
   if not path.exists(projectDir):
     makedirs(projectDir)
 
-  # It's VERY IMPORTANT this chdir command executes. Without it, many files
-  # will be created in subsequent function calls in the wrong place.
-  chdir(projectDir)
-
 
 def mkVirtEnv(venvDir, noReq):
-  call(['python3', '-m', 'venv', venvDir])
-  call(['{}/bin/python'.format(venvDir), '-m', 'pip', 'install',
-    '--upgrade', 'pip', 'setuptools', 'wheel'])
+  def f():
+    call(['python3', '-m', 'venv', venvDir])
+    call(['{}/bin/python'.format(venvDir), '-m', 'pip', 'install',
+      '--upgrade', 'pip', 'setuptools', 'wheel'])
 
-  reqFile = 'requirements.txt'
+    reqFile = 'requirements.txt'
 
-  if not path.exists(reqFile):
-    print('No {} found'.format(reqFile))
-  elif noReq:
-    print('Installation of requirements not desired')
-  else:
-    call(['{}/bin/pip'.format(venvDir), 'install', '-r', reqFile])
+    if not path.exists(reqFile):
+      print('No {} found'.format(reqFile))
+    elif noReq:
+      print('Installation of requirements not desired')
+    else:
+      call(['{}/bin/pip'.format(venvDir), 'install', '-r', reqFile])
+
+  return f
 
 
 def mkGitignore(venvDir, noGitignore):
-  gitIgnoreFile = '.gitignore'
+  def f():
+    gitIgnoreFile = '.gitignore'
 
-  if path.exists(gitIgnoreFile):
-    print('{} already exists, not creating'.format(gitIgnoreFile))
-  elif noGitignore:
-    print('No {} desired, not creating'.format(gitIgnoreFile))
-  else:
-    with open(gitIgnoreFile, 'w') as f:
-      f.write('{}\n'.format(venvDir))
-    print('{} created'.format(gitIgnoreFile))
+    if path.exists(gitIgnoreFile):
+      print('{} already exists, not creating'.format(gitIgnoreFile))
+    elif noGitignore:
+      print('No {} desired, not creating'.format(gitIgnoreFile))
+    else:
+      with open(gitIgnoreFile, 'w') as f:
+        f.write('{}\n'.format(venvDir))
+      print('{} created'.format(gitIgnoreFile))
+
+  return f
 
 
 def main():
@@ -123,8 +137,8 @@ def main():
     print("{} {}".format(argv[0], version))
   else:
     prepDirectory(args.projectDir)
-    mkVirtEnv(args.venvDir, args.noReq)
-    mkGitignore(args.venvDir, args.noGitignore)
+    withDirectory(args.projectDir, mkVirtEnv(args.venvDir, args.noReq))
+    withDirectory(args.projectDir, mkGitignore(args.venvDir, args.noGitignore))
     print("\nVirtual environment is ready for project in directory {}".format(args.projectDir))
 
 
