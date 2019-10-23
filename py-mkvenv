@@ -4,12 +4,21 @@ import argparse
 from os import (chdir, getcwd, makedirs, path)
 from subprocess import call
 from sys import argv
+from typing import (Callable, cast)
 
 
 version = '1.4'
 
 
-def parseArgs():
+class Args:
+  noGitignore: bool
+  noReq: bool
+  venvDir: str
+  displayVersion: bool
+  projectDir: str
+
+
+def parseArgs() -> Args:
   parser = argparse.ArgumentParser(
     description = 'Automate creation of virtual environments in Python 3 projects',
     formatter_class = argparse.RawDescriptionHelpFormatter,
@@ -76,12 +85,12 @@ v{}  Dino Morelli <dino@ui3.info>""".format(version)
     help="Project directory, specifying this will create a new project directory and environment within it [default: {}]".format(projectDirDefault)
     )
 
-  return parser.parse_args()
+  return cast(Args, parser.parse_args())
 
 
 # Execute a function only if we can chdir into the supplied directory first.
 # Restoring the working directory afterwards.
-def withDirectory(dir, f):
+def withDirectory(dir: str, f: Callable[[], None]) -> None:
   cwd = getcwd()
 
   try:
@@ -91,13 +100,13 @@ def withDirectory(dir, f):
     chdir(cwd)
 
 
-def prepDirectory(projectDir):
+def prepDirectory(projectDir: str) -> None:
   if not path.exists(projectDir):
     makedirs(projectDir)
 
 
-def mkVirtEnv(venvDir, noReq):
-  def f():
+def mkVirtEnv(venvDir: str, noReq: bool) -> Callable[[], None]:
+  def f() -> None:
     call(['python3', '-m', 'venv', venvDir])
     call(['{}/bin/python'.format(venvDir), '-m', 'pip', 'install',
       '--upgrade', 'pip', 'setuptools', 'wheel'])
@@ -114,8 +123,8 @@ def mkVirtEnv(venvDir, noReq):
   return f
 
 
-def mkGitignore(venvDir, noGitignore):
-  def f():
+def mkGitignore(venvDir: str, noGitignore: bool) -> Callable[[], None]:
+  def f() -> None:
     gitIgnoreFile = '.gitignore'
 
     if path.exists(gitIgnoreFile):
@@ -130,7 +139,7 @@ def mkGitignore(venvDir, noGitignore):
   return f
 
 
-def main():
+def main() -> None:
   args = parseArgs()
 
   if args.displayVersion:
