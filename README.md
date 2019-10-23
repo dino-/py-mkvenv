@@ -94,6 +94,15 @@ wish the version number to be explicit in the filename.
 
 These steps will likely be automated in the future.
 
+### Updating the libraries
+
+Replace all `==` with `>=` in `requirements.txt, then
+
+    $ pip install --upgrade --force-reinstall -r requirements.txt
+    $ pip freeze > requirements.txt
+
+And check this new version of `requirements.txt` into source control.
+
 
 ## Contact
 
