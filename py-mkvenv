@@ -39,6 +39,10 @@ If you add more packages, consider refreshing the `requirements.txt` file
   $ pip install SOME_PYTHON_PACKAGE
   $ pip freeze > requirements.txt
 
+To leave the environment, deactivate
+
+  $ deactivate
+
 v1.4  Dino Morelli <dino@ui3.info>
 
 """
