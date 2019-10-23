@@ -87,9 +87,9 @@ Finally, run `linuxdeploy` to complete the process of creating the AppImage
 
     $ linuxdeploy-x86_64.AppImage --appdir=AppDir --output=appimage
 
-You should now have a binary named `py-mkvenv-x86_64.AppImage`.
+You should now have a binary named something like `py-mkvenv-75d2222-x86_64.AppImage`.
 
-This binary could be renamed to something like `py-mkvenv-1.2.AppImage` if you
+This binary could be renamed to something like `py-mkvenv-1.4-x86_64.AppImage` if you
 wish the version number to be explicit in the filename.
 
 These steps will likely be automated in the future.
