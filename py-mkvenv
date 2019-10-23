@@ -1,28 +1,19 @@
 #! /usr/bin/env python3
 
-"""
-usage:
-  py-mkvenv [-v DIR] [-R] [-G] [PROJECT_DIR]
-  py-mkvenv [-h]
-  py-mkvenv [--version]
-
-Automate creation of virtual environments in Python 3 projects
-
-positional arguments:
-  PROJECT_DIR   Project directory, specifying this will create a new project
-                directory and environment within it [default: .]
-
-options:
-  -h, --help    Show this help message and exit
-  -G, --no-gitignore
-                Suppress creation of `.gitignore` file
-  -R, --no-req  Suppress installation of dependencies in `requirements.txt`
-  -v DIR, --venv-dir DIR
-                Directory under the project to create the virtual
-                environment [default: .venv]
-  --version     Show version info and exit
+import argparse
+from os import (chdir, makedirs, path)
+from subprocess import call
+from sys import argv
 
 
+version = '1.4'
+
+
+def parseArgs():
+  parser = argparse.ArgumentParser(
+    description = 'Automate creation of virtual environments in Python 3 projects',
+    formatter_class = argparse.RawDescriptionHelpFormatter,
+    epilog = """
 Creates a Python virtual environment directory in a new or existing project
 using `python3 -m venv`. After the environment is created, this tool will
 update `pip`, `setuptools` and `wheel`. Finally, it will detect a
@@ -43,13 +34,49 @@ To leave the environment, deactivate
 
   $ deactivate
 
-v1.4  Dino Morelli <dino@ui3.info>
+v{}  Dino Morelli <dino@ui3.info>""".format(version)
+    )
 
-"""
+  parser.add_argument(
+    '-G', '--no-gitignore',
+    dest = 'noGitignore',
+    action = 'store_true',
+    help = "Suppress creation of `.gitignore` file"
+    )
 
-from docopt import docopt
-from os import (chdir, makedirs, path)
-from subprocess import call
+  parser.add_argument(
+    '-R', '--no-req',
+    dest = 'noReq',
+    action = 'store_true',
+    help = "Suppress installation of dependencies in `requirements.txt`"
+    )
+
+  venvDefault = '.venv'
+  parser.add_argument(
+    '-v', '--venv-dir',
+    dest = 'venvDir',
+    metavar = 'DIR',
+    default = venvDefault,
+    help = "Directory under the project to create the virtual environment [default: {}]".format(venvDefault)
+    )
+
+  parser.add_argument(
+    '--version',
+    dest = 'displayVersion',
+    action = 'store_true',
+    help = "Show version info and exit"
+    )
+
+  projectDirDefault = '.'
+  parser.add_argument(
+    'projectDir',
+    metavar = 'PROJECT_DIR',
+    nargs = '?',
+    default = projectDirDefault,
+    help="Project directory, specifying this will create a new project directory and environment within it [default: {}]".format(projectDirDefault)
+    )
+
+  return parser.parse_args()
 
 
 def prepDirectory(projectDir):
@@ -90,14 +117,15 @@ def mkGitignore(venvDir, noGitignore):
 
 
 def main():
-  args = docopt(__doc__, version='py-mkvenv 1.4')
-  # docopt can't set default values for positional arguments (yet), fix that up here
-  if args['PROJECT_DIR'] is None: args['PROJECT_DIR'] = '.'
+  args = parseArgs()
 
-  prepDirectory(args['PROJECT_DIR'])
-  mkVirtEnv(args['--venv-dir'], args['--no-req'])
-  mkGitignore(args['--venv-dir'], args['--no-gitignore'])
-  print("\nVirtual environment is ready for project in directory {}".format(args['PROJECT_DIR']))
+  if args.displayVersion:
+    print("{} {}".format(argv[0], version))
+  else:
+    prepDirectory(args.projectDir)
+    mkVirtEnv(args.venvDir, args.noReq)
+    mkGitignore(args.venvDir, args.noGitignore)
+    print("\nVirtual environment is ready for project in directory {}".format(args.projectDir))
 
 
 if __name__ == '__main__': main()
