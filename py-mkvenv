@@ -7,7 +7,7 @@ from sys import argv
 from typing import (Callable, cast)
 
 
-version = '1.4'
+VERSION = '1.4'
 
 
 class Args:
@@ -43,7 +43,7 @@ To leave the environment, deactivate
 
   $ deactivate
 
-v{}  Dino Morelli <dino@ui3.info>""".format(version)
+v{}  Dino Morelli <dino@ui3.info>""".format(VERSION)
     )
 
   parser.add_argument(
@@ -90,11 +90,11 @@ v{}  Dino Morelli <dino@ui3.info>""".format(version)
 
 # Execute a function only if we can chdir into the supplied directory first.
 # Restoring the working directory afterwards.
-def withDirectory(dir: str, f: Callable[[], None]) -> None:
+def withDirectory(directory: str, f: Callable[[], None]) -> None:
   cwd = getcwd()
 
   try:
-    chdir(dir)
+    chdir(directory)
     f()
   finally:
     chdir(cwd)
@@ -143,7 +143,7 @@ def main() -> None:
   args = parseArgs()
 
   if args.displayVersion:
-    print("{} {}".format(argv[0], version))
+    print("{} {}".format(argv[0], VERSION))
   else:
     prepDirectory(args.projectDir)
     withDirectory(args.projectDir, mkVirtEnv(args.venvDir, args.noReq))
