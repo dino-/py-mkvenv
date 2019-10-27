@@ -81,8 +81,6 @@ Use an earlier version of py-mkvenv to make the virtual environment or, if that 
     $ . ./.venv/bin/activate
     $ pip install -r requirements.txt
 
-`python3` on a Ubuntu 14.04 system will point to Python 3.4 so you must edit the #! line in `py-mkvenv` to point to `python3.6` instead of `python3`
-
 You should now be able to run it, type check it with mypy, etc.
 
 You will need the AppDir tool [linuxdeploy](https://github.com/linuxdeploy/linuxdeploy)
