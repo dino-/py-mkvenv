@@ -44,7 +44,7 @@ To leave the environment, deactivate
 
   $ deactivate
 
-v{}  Dino Morelli <dino@ui3.info>""".format(VERSION)
+v{}  Dino Morelli <dino@ui3.info>""".format(VERSION())
     )
 
   parser.add_argument(
@@ -144,7 +144,7 @@ def main() -> None:
   args = parseArgs()
 
   if args.displayVersion:
-    print("{} {}".format(argv[0], VERSION))
+    print("{} {}".format(argv[0], VERSION()))
   else:
     prepDirectory(args.projectDir)
     withDirectory(args.projectDir, mkVirtEnv(args.venvDir, args.noReq))
