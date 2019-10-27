@@ -59,14 +59,35 @@ If desired, deactivate the virtual environment in your shell
 
     $ deactivate
 
-### Building for release
+### Building a release AppImage
 
-The preferred method of building py-mkvenv for release is as an
-[AppImage](https://appimage.org/)
+It's important to build the [AppImage](https://appimage.org/) on an older
+distribution so it's compatible with many systems. In practical terms Ubuntu
+14.04 is a good choice for this.
+
+The stock version of Python 3 on Ubuntu 14.04 is 3.4 but we need a higher
+version.
+
+So, install Python 3.6:
+
+    # add-apt-repository ppa:deadsnakes/ppa
+    # apt-update
+    # apt install python3.6 python3.6-dev python3.6-venv
+
+Use an earlier version of py-mkvenv to make the virtual environment or, if that isn't possible:
+
+    $ python3.6 -m venv .venv
+    $ ./.venv/bin/python -m pip install --upgrade pip setuptools wheel
+    $ . ./.venv/bin/activate
+    $ pip install -r requirements.txt
+
+`python3` on a Ubuntu 14.04 system will point to Python 3.4 so you must edit the #! line in `py-mkvenv` to point to `python3.6` instead of `python3`
+
+You should now be able to run it, type check it with mypy, etc.
 
 You will need the AppDir tool [linuxdeploy](https://github.com/linuxdeploy/linuxdeploy)
 and the AppImage plugin [linuxdeploy-plugin-appimage](https://github.com/linuxdeploy/linuxdeploy-plugin-appimage).
-These need to be set executable and can be on your PATH if you wish.
+These need to be set executable and must be on your PATH.
 
 The project's `requirements.txt` will pull in `pyinstaller` which will be used
 to build a distributable standalone directory in `dist`
