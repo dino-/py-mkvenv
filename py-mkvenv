@@ -7,8 +7,7 @@ from sys import argv
 from typing import (Callable, cast)
 
 
-# This has to be done to simulate a constant, immutable value
-def VERSION() -> str: return '1.4'
+def VERSION() -> str: return '1.5'
 
 
 class Args:
