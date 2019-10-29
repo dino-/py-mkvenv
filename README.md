@@ -83,35 +83,16 @@ Use an earlier version of py-mkvenv to make the virtual environment or, if that 
 
 You should now be able to run it, type check it with mypy, etc.
 
-You will need the AppDir tool [linuxdeploy](https://github.com/linuxdeploy/linuxdeploy)
-and the AppImage plugin [linuxdeploy-plugin-appimage](https://github.com/linuxdeploy/linuxdeploy-plugin-appimage).
-These need to be set executable and must be on your PATH.
-
-The project's `requirements.txt` will pull in `pyinstaller` which will be used
-to build a distributable standalone directory in `dist`
-
-First, prep the AppDir with one provided for this project like this:
-
-    $ cp -r util/resources/AppDir .
-
-Next, build a standalone distributable directory with `pyinstaller`.
-
-    $ pyinstaller py-mkvenv.spec
-
-Move those build artifacts into the AppDir directory.
-
-    $ mv dist/py-mkvenv AppDir/usr/share
-
-Finally, run `linuxdeploy` to complete the process of creating the AppImage
-
-    $ linuxdeploy-x86_64.AppImage --appdir=AppDir --output=appimage
-
-You should now have a binary named something like `py-mkvenv-75d2222-x86_64.AppImage`.
+To build the AppImage, run `util/bin/mkappimage.sh`. If all goes well, you
+should now have a binary named something like
+`py-mkvenv-75d2222-x86_64.AppImage`.
 
 This binary could be renamed to something like `py-mkvenv-1.4-x86_64.AppImage` if you
 wish the version number to be explicit in the filename.
 
-These steps will likely be automated in the future.
+Note: You will need the AppDir tool [linuxdeploy](https://github.com/linuxdeploy/linuxdeploy)
+and the AppImage plugin [linuxdeploy-plugin-appimage](https://github.com/linuxdeploy/linuxdeploy-plugin-appimage).
+These need to be set executable and must be on your PATH.
 
 ### Updating the libraries
 
