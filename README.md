@@ -18,7 +18,7 @@ This tool will also create a `.gitignore` file if none is present.
 
 ## Getting binaries
 
-py-mkvenv is available for Linux in AppImage form [from github](https://github.com/dino-/py-mkvenv/releases)
+py-mkvenv is available for Linux as a standalone binary [from github](https://github.com/dino-/py-mkvenv/releases)
 
 
 ## Development
@@ -50,6 +50,11 @@ Install the project's dependencies using the `requirements.txt` file
 
     $ pip install -r requirements.txt
 
+You should now be able to run it, type check it with mypy, etc.
+
+    $ ./py-mkvenv     # Run it
+    $ mypy py-mkvenv  # Type check with mypy
+
 Over time, you may install more libraries using `pip install`. Get a list of
 those and check these changes into source control if necessary.
 
@@ -59,11 +64,11 @@ If desired, deactivate the virtual environment in your shell
 
     $ deactivate
 
-### Building a release AppImage
+### Building a standalone binary release
 
-It's important to build the [AppImage](https://appimage.org/) on an older
-distribution so it's compatible with many systems. In practical terms Ubuntu
-14.04 is a good choice for this.
+It's important to build the distributable binary on an older distribution so
+it's compatible with many systems. In practical terms Ubuntu 14.04 is a good
+choice for this.
 
 The stock version of Python 3 on Ubuntu 14.04 is 3.4 but we need a higher
 version.
@@ -74,25 +79,18 @@ So, install Python 3.6:
     # apt-update
     # apt install python3.6 python3.6-dev python3.6-venv
 
-Use an earlier version of py-mkvenv to make the virtual environment or, if that isn't possible:
+Use an earlier version of py-mkvenv to make the virtual environment or, if that
+isn't possible:
 
     $ python3.6 -m venv .venv
     $ ./.venv/bin/python -m pip install --upgrade pip setuptools wheel
     $ . ./.venv/bin/activate
     $ pip install -r requirements.txt
 
-You should now be able to run it, type check it with mypy, etc.
+To build the distributable binary, run `util/bin/mkdist.sh`. If all goes well,
+you should have a binary named something like this:
 
-To build the AppImage, run `util/bin/mkappimage.sh`. If all goes well, you
-should now have a binary named something like
-`py-mkvenv-75d2222-x86_64.AppImage`.
-
-This binary could be renamed to something like `py-mkvenv-1.4-x86_64.AppImage` if you
-wish the version number to be explicit in the filename.
-
-Note: You will need the AppDir tool [linuxdeploy](https://github.com/linuxdeploy/linuxdeploy)
-and the AppImage plugin [linuxdeploy-plugin-appimage](https://github.com/linuxdeploy/linuxdeploy-plugin-appimage).
-These need to be set executable and must be on your PATH.
+    dist/py-mkvenv-1.6
 
 ### Updating the libraries
 
