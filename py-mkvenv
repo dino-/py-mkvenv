@@ -72,7 +72,7 @@ def main() -> None:
     withDirectory(args.projectDir, mkGitignore(args.venvDir, args.noGitignore))
 
     print(f"\nThe virtual environment is ready for the project in directory {args.projectDir}")
-    print("To start using it, type: `. ./.venv/bin/activate` from within that directory")
+    print(f"To start using it, type: `. ./{args.venvDir}/bin/activate` from within that directory")
 
 
 if __name__ == '__main__': main()
