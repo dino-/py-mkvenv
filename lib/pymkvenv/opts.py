@@ -2,7 +2,7 @@ import argparse
 from typing import cast
 
 
-def VERSION() -> str: return '1.6'
+def VERSION() -> str: return '1.7'
 
 
 class Args:
