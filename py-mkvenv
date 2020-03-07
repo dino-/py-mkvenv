@@ -13,7 +13,7 @@ from pymkvenv.opts import (Args, parseArgs, VERSION)
 # Execute a function only if we can chdir into the supplied directory first.
 # Restoring the working directory afterwards.
 def withDirectory(directory: str, f: Callable[[], None]) -> None:
-  cwd = getcwd()
+  cwd: str = getcwd()
 
   try:
     chdir(directory)
@@ -33,7 +33,7 @@ def mkVirtEnv(venvDir: str, noReq: bool) -> Callable[[], None]:
     call([f'{venvDir}/bin/python', '-m', 'pip', 'install',
       '--upgrade', 'pip', 'setuptools', 'wheel'])
 
-    reqFile = 'requirements.txt'
+    reqFile: str = 'requirements.txt'
 
     if not path.exists(reqFile):
       print(f'No {reqFile} found')
@@ -47,7 +47,7 @@ def mkVirtEnv(venvDir: str, noReq: bool) -> Callable[[], None]:
 
 def mkGitignore(venvDir: str, noGitignore: bool) -> Callable[[], None]:
   def f() -> None:
-    gitIgnoreFile = '.gitignore'
+    gitIgnoreFile: str = '.gitignore'
 
     if path.exists(gitIgnoreFile):
       print(f'{gitIgnoreFile} already exists, not creating')
@@ -62,7 +62,7 @@ def mkGitignore(venvDir: str, noGitignore: bool) -> Callable[[], None]:
 
 
 def main() -> None:
-  args = parseArgs()
+  args: Args = parseArgs()
 
   if args.displayVersion:
     print(f"{sys.argv[0]} {VERSION()}")
