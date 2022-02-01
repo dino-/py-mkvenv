@@ -7,6 +7,7 @@ from typing import Callable
 
 sys.path.insert(0, 'lib')
 
+# pylint: disable=wrong-import-position
 from pymkvenv.opts import (Args, parseArgs, VERSION)
 
 
@@ -54,6 +55,7 @@ def mkGitignore(venvDir: str, noGitignore: bool) -> Callable[[], None]:
     elif noGitignore:
       print(f'No {gitIgnoreFile} desired, not creating')
     else:
+      # pylint: disable-next=unspecified-encoding
       with open(gitIgnoreFile, 'w') as f:
         f.write(f'{venvDir}\n')
       print(f'{gitIgnoreFile} created')
